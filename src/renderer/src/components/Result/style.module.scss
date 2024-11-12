@@ -6,17 +6,26 @@
 
     &.active {
       @apply bg-zinc-200 dark:bg-[#5977cb];
+      .title {
+        @apply dark:text-slate-800;
+      }
+      .text {
+        @apply dark:text-gray-700;
+      }
+      .icon {
+        @apply dark:bg-slate-300 dark:text-slate-800;
+      }
     }
   }
 
   .icon {
-    @apply p-1 bg-gray-300 rounded-md text-zinc-600;
+    @apply p-1 bg-neutral-300 rounded-md text-zinc-600;
   }
 
   .content {
     @apply overflow-hidden;
     .title {
-      @apply text-sm font-sans font-semibold dark:text-gray-300;
+      @apply text-sm font-sans font-semibold dark:text-neutral-200;
     }
     .text {
       @apply text-xs text-nowrap overflow-ellipsis dark:text-[#aeb1b6];

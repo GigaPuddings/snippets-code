@@ -1,0 +1,9 @@
+.contentSearch {
+  @apply border-b dark:border-b-[#43444e] dark:bg-[#282d32] flex justify-between items-center h-[40px];
+  .search {
+    @apply bg-transparent dark:text-[#adb0b8] text-sm py-2 w-full;
+  }
+  .add {
+    @apply cursor-pointer rounded-md p-1 mr-2 dark:text-[#adb0b8] hover:bg-slate-200 dark:hover:bg-[--mantine-color-default-hover];
+  }
+}

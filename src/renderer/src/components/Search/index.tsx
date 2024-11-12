@@ -4,6 +4,7 @@ import { debounce } from 'lodash';
 import { HomeTwo } from "@icon-park/react"
 import Result from "@renderer/components/Result"
 import useSearch from "@renderer/hooks/useSearch"
+import styles from "./styles.module.scss"
 
 export default function Search() {
   const { search, handleSearch } = useSearch()
@@ -49,19 +50,19 @@ export default function Search() {
   // };
 
   return (
-    <main className="bg-slate-50 dark:bg-[#22282c] py-3 px-3 rounded-lg drag">
+    <main className={`${styles.main} drag`}>
       {/*  onMouseLeave={handleMouseLeave} */}
-      <section className="rounded-lg flex items-center nodrag">
+      <section className={`${styles.search} nodrag`}>
         <Input
           ref={inputRef}
           value={value}
           autoFocus
           variant="borderless"
           onChange={handleChange}
-          className="bg-slate-200 dark:bg-[#282d32] dark:text-stone-300 ml-1 mr-2 nodrag font-semibold text-[17px] p-2 text-zinc-700"
+          className={`${styles.input} nodrag`}
         />
         <div
-          className="p-1 bg-gray-300 dark:bg-[#424242] dark:text-stone-300 rounded-md text-zinc-600 cursor-pointer"
+          className={styles.home}
           onClick={() => setOpenWindow()}
         >
           <HomeTwo

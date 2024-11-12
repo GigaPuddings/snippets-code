@@ -8,5 +8,5 @@
 
 .active {
   @include commonLink();
-  @apply bg-[#4b94f8] dark:bg-[#5977cb] dark:hover:bg-[#5977cb] text-white hover:bg-[#4b94f8];
+  @apply bg-[#4b94f8] dark:bg-[#5977cb] dark:hover:bg-[#5977cb] text-white hover:bg-[#4b94f8] hover:text-white;
 }
