@@ -1,0 +1,17 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+  "include": [
+    "electron.vite.config.*",
+    "src/main/**/*",
+    "src/preload/**/*",
+    "types.d.ts"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "noUnusedLocals": false, /* 检查未使用的变量 */
+    "noUnusedParameters": false, /* 检查未使用的函数参数 */
+    "types": [
+      "electron-vite/node"
+    ]
+  }
+}

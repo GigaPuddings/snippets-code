@@ -1,0 +1,26 @@
+.main {
+  @apply bg-slate-50 dark:bg-[#22282c] px-2 rounded-bl-lg rounded-br-lg max-h-[232px] overflow-y-auto;
+
+  .item {
+    @apply flex items-center gap-2 text-slate-700 truncate px-2 py-1 rounded-lg cursor-pointer;
+
+    &.active {
+      @apply bg-zinc-200 dark:bg-[#5977cb];
+    }
+  }
+
+  .icon {
+    @apply p-1 bg-gray-300 rounded-md text-zinc-600;
+  }
+
+  .content {
+    @apply overflow-hidden;
+    .title {
+      @apply text-sm font-sans font-semibold dark:text-gray-300;
+    }
+    .text {
+      @apply text-xs text-nowrap overflow-ellipsis dark:text-[#aeb1b6];
+    }
+  }
+
+}

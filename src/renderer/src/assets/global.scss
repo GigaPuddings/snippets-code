@@ -1,0 +1,253 @@
+body {
+  @apply w-screen h-screen;
+}
+
+.drag {
+  -webkit-app-region: drag;
+}
+
+.nodrag,
+input,
+select,
+textarea,
+option {
+  -webkit-app-region: no-drag;
+}
+
+a:hover {
+  @apply text-zinc-900 dark:text-[--mantine-color-gray-light-color];
+}
+
+// 代码块样式
+.code-mirror {
+  @apply relative dark:bg-[#282d32] z-0 overflow-auto h-[calc(100vh-84px)] bg-slate-50 mr-1;
+}
+
+// 代码块隐藏序列右边框
+.ͼ2 .cm-gutters {
+  @apply border-r-0;
+}
+
+// 代码块自动转行
+.ͼ1 .cm-content {
+  white-space: pre-wrap;
+  white-space: break-spaces;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  flex-shrink: 1;
+}
+
+.ant-btn {
+  @apply h-6 px-2 py-3 text-sm;
+}
+
+.ant-tabs-content {
+  @apply h-full pt-5;
+}
+
+// 弹框
+.ant-modal {
+  &>div {
+    @apply dark:shadow-xl dark:border dark:border-black dark:border-opacity-15 rounded-md;
+  }
+
+  .ant-modal-content {
+    @apply px-4 py-3 dark:bg-[#282d32] dark:shadow;
+
+    p,
+    .ant-modal-confirm-title,
+    .ant-modal-confirm-content {
+      @apply dark:text-white;
+    }
+
+    .ant-btn-variant-outlined,
+    .ant-btn-variant-outlined:hover {
+      @apply dark:bg-neutral-800;
+    }
+
+    .ant-btn-variant-outlined:not(.ant-btn-color-dangerous) {
+      span {
+        @apply dark:text-white;
+      }
+    }
+  }
+}
+
+
+// 输入框
+.ant-input {
+  @apply dark:bg-[#282d32];
+
+  &::placeholder {
+    @apply dark:text-[#adb0b8] text-xs;
+  }
+
+  &:hover {
+    @apply dark:bg-[#282d32];
+  }
+}
+
+.ant-tabs {
+  @apply dark:bg-[#282d32];
+}
+
+.ant-dropdown {
+  .ant-dropdown-menu {
+    @apply dark:bg-[#282d32];
+  }
+}
+
+.ant-dropdown {
+  @apply dark:bg-[#282d32] dark:shadow-md dark:border dark:border-black dark:border-opacity-15;
+
+  .ant-dropdown-menu-item:hover {
+    @apply dark:dark:hover:bg-[--mantine-color-default-hover];
+  }
+
+  .ant-dropdown-menu-item-icon,
+  .ant-dropdown-menu-title-content {
+    @apply dark:text-[#999b9d];
+  }
+}
+
+
+.ant-input,
+.ant-tabs-tab-btn,
+.ant-select-selection-item,
+.ant-select .ant-select-arrow,
+.ant-select-item-option-content,
+.ant-select-single.ant-select-open .ant-select-selection-item,
+.label {
+  @apply dark:text-white;
+}
+
+.ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector,
+.ant-input-outlined:focus-within {
+  @apply dark:border-gray-300;
+}
+
+.ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  @apply dark:bg-gray-600;
+}
+
+.ant-input-outlined,
+.ant-select-dropdown,
+.ant-input-outlined:focus-within,
+.ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  @apply dark:bg-[#282d32];
+}
+
+// 分割线
+.ant-splitter>.ant-splitter-bar .ant-splitter-bar-dragger:hover:not(.ant-splitter-bar-dragger-active):before,
+.ant-splitter>.ant-splitter-bar .ant-splitter-bar-dragger-active:before {
+  @apply dark:bg-transparent;
+}
+
+//滚动条样式
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 6px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  @apply rounded-md bg-[#dddee0] dark:bg-[#686868];
+}
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  @apply rounded-md bg-[#ededed] dark:bg-[#424242];
+}
+
+.contextMenu {
+  @apply rounded-md py-2 px-1 bg-white border;
+
+  &>div {
+    @apply rounded-md overflow-hidden p-0;
+
+    button {
+      @apply text-zinc-600 px-1 py-1 hover:bg-zinc-200;
+    }
+
+    .mantine-contextmenu-item-button-title {
+      @apply text-xs;
+    }
+  }
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 53px;
+  left: 2px;
+  z-index: 9999;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 11px 8px 0;
+  border-color: transparent #f5f7fa transparent transparent;
+}
+
+// .cm-editor {
+//   background-color: #282d32 !important;
+// }
+
+.ant-tooltip-inner {
+  @apply text-xs pt-1 px-1;
+  min-height: 25px !important;
+}
+
+.loader {
+  height: 8px;
+  margin-bottom: 60px;
+  --c: no-repeat linear-gradient(#E0E0E0 0 0);
+  background: var(--c), var(--c), #F5F5F5;
+  background-size: 60% 100%;
+  animation: l16 3s infinite;
+}
+
+@keyframes l16 {
+  0% {
+    background-position: -150% 0, -150% 0
+  }
+
+  66% {
+    background-position: 250% 0, -150% 0
+  }
+
+  100% {
+    background-position: 250% 0, 250% 0
+  }
+}
+
+
+.wavy {
+  position: relative;
+}
+
+.wavy span {
+  position: relative;
+  display: inline-block;
+  font-size: 40px;
+  color: #BDBDBD;
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  animation: wavyAnimate 1s ease-in-out infinite;
+  animation-delay: calc(0.1s * var(--i));
+}
+
+@keyframes wavyAnimate {
+  0% {
+    transform: translateY(0);
+  }
+
+  20% {
+    transform: translateY(-20px);
+  }
+
+  40%,
+  100% {
+    transform: translateY(0);
+  }
+}

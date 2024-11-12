@@ -1,0 +1,49 @@
+.main {
+  @apply  rounded-lg overflow-hidden bg-slate-100 dark:bg-[#282d32] h-screen;
+  h1 {
+    @apply flex justify-center text-sm;
+  }
+}
+
+.container {
+  @apply px-3;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 40px;
+  // grid-row-gap: 20px;
+  grid-template-areas:
+    ". ."
+    ". ."
+    ". ."
+    "footer footer";
+}
+
+.footer {
+  @apply w-full text-center;
+  grid-area: footer;
+}
+
+.section {
+  @apply my-4 first:mt-0 last:mb-0;
+  input {
+    @apply w-60;
+  }
+  .label {
+    @apply text-xs mb-2 text-slate-700 dark:text-white;
+  }
+}
+
+
+// .section {
+//   @apply  border p-3 rounded-md bg-white dark:bg-[#22282c] dark:border-[--mantine-color-gray-8] my-5;
+//   input {
+//     &:hover, &:active {
+//       @apply dark:bg-[--mantine-color-gray-4] dark:border-[--mantine-color-default-hover];
+//     }
+//     @apply dark:bg-[--mantine-color-gray-4] dark:border-[--mantine-color-default-hover];
+//   }
+//   h5 {
+//     @apply text-xs font-bold mb-2 text-slate-700 dark:text-[--mantine-color-gray-light-color] opacity-80;
+//   }
+// }

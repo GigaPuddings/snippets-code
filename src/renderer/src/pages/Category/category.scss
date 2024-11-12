@@ -1,0 +1,21 @@
+.category-page {
+  @apply bg-gray-100 dark:bg-[#22282c] w-screen h-screen overflow-hidden;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  grid-template-rows: 1fr;
+  .categories {
+    @apply border-r dark:border-r-[#000] px-2 text-xs text-slate-700 overflow-y-auto;
+    .categories-head {
+      @apply flex justify-between items-center;
+    }
+    .hint {
+      @apply px-1 mt-2 opacity-90 mb-1 text-gray-400;
+    }
+    .interaction {
+      @apply flex items-center;
+      .icon {
+        @apply p-1 rounded-md cursor-pointer text-gray-400 hover:bg-gray-200 dark:hover:bg-[--mantine-color-default-hover];
+      }
+    }
+  }
+}

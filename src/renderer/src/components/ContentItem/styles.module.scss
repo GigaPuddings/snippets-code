@@ -1,0 +1,31 @@
+@mixin commonLink {
+  @apply block py-1 truncate rounded-lg cursor-pointer transition-all hover:bg-[#f4f4f5] dark:hover:bg-[--mantine-color-default-hover] hover:border-b-slate-100 border-b-transparent;
+}
+
+.link {
+  @include commonLink();
+}
+
+.item {
+  @apply relative text-xs px-3 py-[6px] rounded-md select-none after:h-[1px] dark:after:bg-[#43444e] after:bg-slate-200 after:absolute after:w-[calc(100%-4px)] after:-bottom-1 after:right-[0.1rem];
+  .header {
+    @apply truncate dark:text-[--mantine-color-gray-light-color];
+  }
+
+  .footer {
+    @apply flex justify-between items-center pt-3 text-[#71717a] dark:text-[#aeb1b6];
+
+    .folder {
+      @apply flex items-center gap-1 flex-1 truncate;
+    }
+
+    .date {
+      @apply text-[10px] opacity-80;
+    }
+  }
+}
+
+.active {
+  @include commonLink();
+  @apply bg-[#f4f4f5] dark:bg-[#5977cb] dark:hover:bg-[#5977cb];
+}

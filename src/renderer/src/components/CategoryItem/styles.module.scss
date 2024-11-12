@@ -1,0 +1,18 @@
+@mixin commonLink {
+  @apply rounded-md text-sm block my-1 px-3 py-1 truncate cursor-pointer hover:bg-gray-200 dark:hover:bg-[--mantine-color-default-hover] dark:text-[--mantine-color-gray-light-color];
+  -webkit-user-drag: none;
+}
+
+.link {
+  @include commonLink();
+}
+
+.active {
+  @include commonLink();
+  @apply bg-[#4b94f8] text-white hover:bg-[#4b94f8] dark:bg-[#5977cb] dark:hover:bg-[#5977cb] hover:text-white;
+}
+
+.input {
+  @apply bg-slate-50 dark:bg-[--mantine-color-dark-outline] dark:text-[--mantine-color-gray-light-color] w-full border outline-none rounded-md px-3 py-1;
+  height: 28px;
+}

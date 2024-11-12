@@ -1,0 +1,30 @@
+@mixin commonIcon {
+  @apply cursor-pointer text-slate-700 hover:bg-gray-200 dark:hover:bg-[--mantine-color-default-hover] hover:rounded;
+}
+
+.contentBar {
+  @apply dark:bg-[#282d32] flex justify-between items-center px-2 w-full h-[40px] border-b dark:border-b-[#43444e];
+}
+
+.titleBar {
+  @apply text-sm text-slate-800 dark:text-[#999b9d] pl-1;
+}
+
+.optionBar {
+  @apply flex h-full items-center gap-4;
+}
+
+.minus {
+  @include commonIcon;
+  @apply text-[20px] p-1 dark:text-[#999b9d];
+}
+
+.squareSmall {
+  @include commonIcon;
+  @apply text-slate-500 p-[2px] dark:text-[#999b9d];
+}
+
+.closeSmall {
+  @include commonIcon;
+  @apply text-[20px] p-[2px] dark:text-[#999b9d];
+}
