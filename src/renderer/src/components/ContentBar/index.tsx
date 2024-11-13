@@ -7,11 +7,11 @@ import { useMantineColorScheme } from '@mantine/core';
 
 import styles from '@renderer/components/ContentBar/styles.module.scss'
 interface Props {
-  isMax?: boolean
+  model?: boolean
   children?: ReactNode
 }
 
-export const ContentBar = ({ isMax = true, children }: Props) => {
+export const ContentBar = ({ model = true, children }: Props) => {
 
   const { setColorScheme } = useMantineColorScheme();
   const [modal, contextHolder] = Modal.useModal();
@@ -56,15 +56,19 @@ export const ContentBar = ({ isMax = true, children }: Props) => {
       <main className={`${styles.contentBar} drag`}>
         <div className={styles.titleBar}>{children}</div>
         <div className={`${styles.optionBar} nodrag`}>
-          {isMax && <Dropdown menu={{ items, onClick }} trigger={['click']} overlayClassName={'dropdown'}>
-            <SettingConfig className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={(e) => e.preventDefault()} />
-          </Dropdown>}
-          <Tooltip placement="bottom" title='最小化' arrow={true}>
-            <Minus className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={() => window.api.minimizeWindow()} />
-          </Tooltip>
-          {isMax && <Tooltip placement="bottom" title='最大化' arrow={true}>
-            <SquareSmall className={styles.squareSmall} theme="outline" size="22" strokeWidth={3} onClick={() => window.api.maximizeWindow()} />
-          </Tooltip>}
+          {model && (
+            <>
+              <Dropdown menu={{ items, onClick }} trigger={['click']} overlayClassName={'dropdown'}>
+                <SettingConfig className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={(e) => e.preventDefault()} />
+              </Dropdown>
+              <Tooltip placement="bottom" title='最小化' arrow={true}>
+                <Minus className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={() => window.api.minimizeWindow()} />
+              </Tooltip>
+              <Tooltip placement="bottom" title='最大化' arrow={true}>
+                <SquareSmall className={styles.squareSmall} theme="outline" size="22" strokeWidth={3} onClick={() => window.api.maximizeWindow()} />
+              </Tooltip>
+            </>
+          )}
           <Tooltip placement="bottom" title='关闭' arrow={true}>
             <CloseSmall className={styles.closeSmall} theme="outline" size="22" strokeWidth={3} onClick={() => window.api.closeWindow()} />
           </Tooltip>
