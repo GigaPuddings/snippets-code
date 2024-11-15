@@ -46,21 +46,21 @@ export const winConfig = {
       isHideTaskbar: false,
       hash: '/#setting'
     }
-  }
-  // preview: {
-  //   id: 0,
-  //   options: {
-  //     width: 400,
-  //     height: 400,
-  //     initShow: false,
-  //     alwaysOnTop: false,
-  //     resizable: false,
-  //     isHideTaskbar: true,
-  //     openDevTools: true,
-  //     skipTaskbar: true,
-  //     hash: '/#preview'
-  //   }
-  // },
+  },
+  preview: {
+    id: 0,
+    options: {
+      width: 400,
+      height: 400,
+      initShow: false,
+      alwaysOnTop: false,
+      resizable: false,
+      isHideTaskbar: true,
+      openDevTools: true,
+      skipTaskbar: true,
+      hash: '/#preview'
+    }
+  },
   // notice: {
   //   id: 0,
   //   options: {

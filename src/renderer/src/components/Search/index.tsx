@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react"
+import { ChangeEvent, MouseEvent, useCallback, useEffect, useRef, useState } from "react"
 import { Input, InputRef } from "antd"
 import { debounce } from 'lodash';
 import { HomeTwo } from "@icon-park/react"
@@ -44,14 +44,14 @@ export default function Search() {
   }, []);
 
   // 鼠标移出窗口外隐藏预览窗口
-  // const handleMouseLeave = (event: MouseEvent<HTMLElement>) => {
-  //   event.preventDefault();
-  //   window.api.hidePreviewWindow()
-  // };
+  const handleMouseLeave = (event: MouseEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    window.api.hidePreviewWindow()
+    window.api.removePreviewContent();
+  };
 
   return (
     <main className={`${styles.main} drag`}>
-      {/*  onMouseLeave={handleMouseLeave} */}
       <section className={`${styles.search} nodrag`}>
         <Input
           ref={inputRef}
@@ -60,6 +60,7 @@ export default function Search() {
           variant="borderless"
           onChange={handleChange}
           className={`${styles.input} nodrag`}
+          onMouseLeave={handleMouseLeave}
         />
         <div
           className={styles.home}

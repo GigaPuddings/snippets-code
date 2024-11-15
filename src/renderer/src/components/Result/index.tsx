@@ -1,10 +1,10 @@
-import { useRef } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import styles from './style.module.scss'
 import useSelect from "@renderer/hooks/useSelect"
 import { ApplicationOne, CodeBrackets } from '@icon-park/react';
 export default function Result() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { data, id, selectItem } = useSelect(containerRef);
+  const { data, id } = useSelect(containerRef);
   // const [hoveredItem, setHoveredItem] = useState<number | null>();
 
   // const handleMouseEnter = (event: MouseEvent<HTMLDivElement>, item: ContentType, index: number) => {
@@ -20,11 +20,15 @@ export default function Result() {
   //   setHoveredItem(null);
   // };
 
-  const handleClick = (item: ContentType) => {
+  const handleClick = (event: MouseEvent<HTMLDivElement>, item: ContentType, index: number) => {
+    event.preventDefault();
     if (item.searchType === 'window') {
       window.api.openApp(item.content);
+    }else {
+      // 发送给主进程，用于显示子窗口
+      window.api.showPreviewWindow(item, index)
     }
-    selectItem(item.id);
+    // selectItem(item.id);
   };
 
   const DynamicIcon = ({ searchType }: { searchType?: string }) => {
@@ -42,19 +46,13 @@ export default function Result() {
       ref={containerRef}
       className={`${styles.main} ${data.length ? 'mt-3' : ''}`}
     >
+      {/* onMouseEnter={(event) => handleMouseEnter(event, item, index + 1)} */}
+      {/* onMouseLeave={handleMouseLeave} */}
       {
-        data.map((item) => (
-          // onMouseEnter={(event) => handleMouseEnter(event, item, index + 1)}
-          //   onMouseLeave={(event)=> handleMouseLeave(event)}
-
-          // <div
-          //   key={item.id}
-          //   onClick={() => handleClick(item)}
-          //   className={[`${styles.item}`, `${item.id === id ? styles.active : ''}`].join(' ')}
-          // >
+        data.map((item, index) => (
           <div
             key={item.id}
-            onClick={() => handleClick(item)}
+            onClick={(event) => handleClick(event, item, index)}
             className={`${styles.item} ${item.id === id ? styles.active : ''}`}
           >
             <DynamicIcon searchType={item.searchType} />

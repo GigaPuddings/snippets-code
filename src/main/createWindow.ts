@@ -17,7 +17,7 @@ export function createWindow(options: OptionsType): BrowserWindow {
   const x = Math.floor((screenWidth - 500) / 2) // 水平居中
   const win = new BrowserWindow({
     width: 500,
-    height: 350,
+    height: 383,
     x,
     show: false,
     frame: false,
@@ -41,7 +41,7 @@ export function createWindow(options: OptionsType): BrowserWindow {
   // 窗口失去焦点
   win.on('blur', () => {
     // 隐藏搜索窗口
-    win.id === 1 && win.hide()
+    // win.id === 1 && win.hide()
   })
 
   win.webContents.setWindowOpenHandler((details) => {
