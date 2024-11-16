@@ -31,7 +31,7 @@ declare global {
       searchLocalApps: (term: string)  => Promise<ContentType[]>
       openApp: (appPath: string)  => void
       loginItemSettings: ()  => Promise<boolean>
-      showPreviewWindow: (item: Pick<ContentType, 'title' | 'content'>, index: number) => void
+      showPreviewWindow: (item?: Pick<ContentType, 'title' | 'content'>, index?: number) => void
       hidePreviewWindow: () => void
       updatePreviewContent: (callback: Function) => void
       removePreviewContent: () => void

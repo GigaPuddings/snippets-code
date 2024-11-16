@@ -1,6 +1,7 @@
 import { app, dialog, globalShortcut, ipcMain, IpcMainInvokeEvent } from 'electron'
 import { getByNameWindow } from './windows'
 import config from './config'
+import { is } from '@electron-toolkit/utils'
 
 // 注册快捷键
 ipcMain.handle('shortCut', (_event: IpcMainInvokeEvent, shortCut: string, type: ShortCutType) => {
@@ -9,7 +10,7 @@ ipcMain.handle('shortCut', (_event: IpcMainInvokeEvent, shortCut: string, type: 
 
 export function registerSearchShortCut(shortCut: string, type: ShortCutType) {
   if (shortCut && globalShortcut.isRegistered(shortCut)) {
-    dialog.showErrorBox('温馨提示', '快捷键注册失败, 请检查快捷键是否已禁用')
+    !is.dev && dialog.showErrorBox('温馨提示', '快捷键注册失败, 请检查快捷键是否已禁用')
     return false
   }
 

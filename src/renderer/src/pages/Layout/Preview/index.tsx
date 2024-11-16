@@ -1,13 +1,21 @@
-import { useState, useEffect, MouseEvent } from 'react';
+import { useState, useEffect, MouseEvent, MutableRefObject, useRef } from 'react';
 import { debounce } from 'lodash';
 import CodeMirrorEditor from '@renderer/components/CodeMirrorEditor';
 import { Statistics } from '@uiw/react-codemirror';
+import useIgnoreMouseEvents from '@renderer/hooks/useIgnoreMouseEvents';
 
 function Preview() {
+  const mainRef = useRef<HTMLDivElement | null>(null)
   const [content, setContent] = useState<Pick<ContentType, 'title' | 'content'>>();
   const [data, setData] = useState<Statistics>();
 
   const basicSetup = { autocompletion: false, highlightActiveLine: false, lineNumbers: false, foldGutter: false };
+  const { setIgnoreMouseEvents } = useIgnoreMouseEvents()
+
+  useEffect(() => {
+    // 鼠标穿透
+    setIgnoreMouseEvents(mainRef as MutableRefObject<HTMLDivElement>)
+  }, [])
 
   useEffect(() => {
     // 监听来自主窗口的内容更新
@@ -40,7 +48,11 @@ function Preview() {
   };
 
   return (
-    <div className="relative max-h-screen w-screen p-3" onMouseLeave={handleMouseLeave}>
+    <div
+      ref={mainRef}
+      className="relative max-h-screen w-screen p-3"
+      onMouseLeave={handleMouseLeave}
+      >
       {content && (
         <>
           {/* <div className="tooltip-arrow"></div> */}

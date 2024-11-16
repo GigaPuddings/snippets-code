@@ -22,11 +22,7 @@ export default (containerRef: React.RefObject<HTMLDivElement>) => {
           setId(data[newIndex].id)
           break
         case 'Enter':
-          // 系统已安装程序调起
-          if (data[newIndex].searchType === 'window') {
-            window.api.openApp(data[newIndex].content)
-          }
-          selectItem(id)
+          selectItem('enter', data[newIndex], index)
           break
         case 'Escape':
           window.api.hideWindow('search')
@@ -37,7 +33,8 @@ export default (containerRef: React.RefObject<HTMLDivElement>) => {
       if (newIndex !== index && containerRef.current) {
         const targetItem = containerRef.current.children[newIndex]
         const { top, bottom } = targetItem.getBoundingClientRect()
-        const { top: containerTop, bottom: containerBottom } = containerRef.current.getBoundingClientRect()
+        const { top: containerTop, bottom: containerBottom } =
+          containerRef.current.getBoundingClientRect()
 
         // 检查目标项是否在可见区域内
         if (bottom > containerBottom) {
@@ -50,13 +47,34 @@ export default (containerRef: React.RefObject<HTMLDivElement>) => {
     [data, id]
   )
 
-  // 选中代码行
-  async function selectItem(id: number) {
-    const content = data.find((item) => item.id === id)?.content
-    if (content) await navigator.clipboard.writeText(content)
+  // 关闭搜索窗口
+  const clearSearchState = () => {
     setData([])
     setSearch('')
     window.api.hideWindow('search')
+  }
+
+  // 选中代码行
+  async function selectItem(type: 'click' | 'enter', item: ContentType, index: number) {
+    try {
+      setId(item.id) // 选中状态
+
+      if (item.searchType === 'window') {
+        window.api.openApp(item.content)
+        clearSearchState()
+        return
+      }
+
+      // 非窗口类型处理逻辑
+      if (type === 'click') {
+        window.api.showPreviewWindow(item, index)
+      } else if (type === 'enter') {
+        await navigator.clipboard.writeText(item.content)
+        clearSearchState()
+      }
+    } catch (error) {
+      console.error('Error handling selectItem:', error)
+    }
   }
 
   // 键盘事件

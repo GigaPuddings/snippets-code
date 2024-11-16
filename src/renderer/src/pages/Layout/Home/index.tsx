@@ -6,7 +6,7 @@ import { useStore } from "@renderer/store/useStore"
 
 function Home(): JSX.Element {
   const mainRef = useRef<HTMLDivElement | null>(null)
-  const { config, setConfig, theme } = useStore(state => state)
+  const { config, setConfig } = useStore(state => state)
 
   const { shortCut } = config
   const { setIgnoreMouseEvents } = useIgnoreMouseEvents()
@@ -27,7 +27,10 @@ function Home(): JSX.Element {
       setConfig({ ...config, databaseDirectory: configPath as string });
     })
 
-  }, [config, theme])
+    // 预览窗口显示
+    window.api.showPreviewWindow()
+
+  }, [config])
 
 
   return (

@@ -1,53 +1,49 @@
-import { MouseEvent, useRef, useState } from 'react';
+import { MouseEvent, useRef, useState, } from 'react';
 import styles from './style.module.scss'
 import useSelect from "@renderer/hooks/useSelect"
 import { ApplicationOne, CodeBrackets } from '@icon-park/react';
+
+
+const DynamicIcon = ({ searchType }: { searchType?: string }) => {
+  switch (searchType) {
+    case 'window':
+      return <ApplicationOne className={styles.icon} theme="outline" size="18" strokeWidth={3} />;
+    default:
+      return <CodeBrackets className={styles.icon} theme="outline" size="18" strokeWidth={3} />;
+  }
+};
+
 export default function Result() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { data, id } = useSelect(containerRef);
-  // const [hoveredItem, setHoveredItem] = useState<number | null>();
+  const { data, id, selectItem } = useSelect(containerRef);
 
-  // const handleMouseEnter = (event: MouseEvent<HTMLDivElement>, item: ContentType, index: number) => {
-  //   event.preventDefault();
-  //   if (hoveredItem === item.id) return
-  //   setHoveredItem(item.id);
-  //   // 发送给主进程，用于显示子窗口
-  //   window.api.showPreviewWindow(item, index)
-  // };
+  const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+    const container = containerRef.current;
+    const rect = container!.getBoundingClientRect(); // 获取容器边界信息
 
-  // const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
-  //   event.preventDefault();
-  //   setHoveredItem(null);
-  // };
+    // 判断鼠标是否在容器右侧移出
+    if (event.clientX >= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom) {
+      return
+    }
+
+    // 阻止事件冒泡
+    event.stopPropagation();
+
+    window.api.hidePreviewWindow(); // 隐藏窗口
+    window.api.removePreviewContent(); // 移出监听
+  };
 
   const handleClick = (event: MouseEvent<HTMLDivElement>, item: ContentType, index: number) => {
     event.preventDefault();
-    if (item.searchType === 'window') {
-      window.api.openApp(item.content);
-    }else {
-      // 发送给主进程，用于显示子窗口
-      window.api.showPreviewWindow(item, index)
-    }
-    // selectItem(item.id);
-  };
-
-  const DynamicIcon = ({ searchType }: { searchType?: string }) => {
-    switch (searchType) {
-      case 'window':
-        return <ApplicationOne className={styles.icon} theme="outline" size="18" strokeWidth={3} />;
-      default:
-        return <CodeBrackets className={styles.icon} theme="outline" size="18" strokeWidth={3} />;
-    }
+    selectItem('click', item, index)
   };
 
   return (
-    // <main ref={containerRef} className={[`${styles.main}`, `${data.length ? 'mt-3' : ''}`].join(' ')}>
     <main
       ref={containerRef}
       className={`${styles.main} ${data.length ? 'mt-3' : ''}`}
+      onMouseLeave={handleMouseLeave}
     >
-      {/* onMouseEnter={(event) => handleMouseEnter(event, item, index + 1)} */}
-      {/* onMouseLeave={handleMouseLeave} */}
       {
         data.map((item, index) => (
           <div

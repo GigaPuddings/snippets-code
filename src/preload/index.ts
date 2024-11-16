@@ -143,7 +143,7 @@ const api = {
   // 显示预览子窗口
   showPreviewWindow: (item: Pick<ContentType, 'title' | 'content'>, index: number) => ipcRenderer.send('show-preview-window', item, index),
   // 隐藏预览子窗口
-  hidePreviewWindow: () => ipcRenderer.send('show-preview-window'),
+  hidePreviewWindow: () => ipcRenderer.send('hide-preview-window'),
   // 向子窗口发送内容数据
   updatePreviewContent: (callback: (arg0: any) => void) => {
     ipcRenderer.on('update-preview-content', (_event, item: Pick<ContentType, 'title' | 'content'>) => {
