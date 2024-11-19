@@ -29,7 +29,6 @@ function Home(): JSX.Element {
 
     // 预览窗口显示
     window.api.showPreviewWindow()
-
   }, [config])
 
 

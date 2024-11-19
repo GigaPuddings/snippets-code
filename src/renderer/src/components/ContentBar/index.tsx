@@ -17,6 +17,47 @@ export const ContentBar = ({ model = true, children }: Props) => {
   const [modal, contextHolder] = Modal.useModal();
   const { theme } = useStore(state => state)
 
+  // const toggleTheme = (event: MouseEvent) => {
+  //   const x = event.clientX;
+  //   const y = event.clientY;
+  //   const endRadius = Math.hypot(
+  //     Math.max(x, innerWidth - x),
+  //     Math.max(y, innerHeight - y)
+  //   );
+
+  //   let isDark: boolean;
+
+  //   const transition = document.startViewTransition(() => {
+  //     const root = document.documentElement;
+  //     // isDark = root.classList.contains("dark");
+  //     // root.classList.remove(isDark ? "dark" : "light");
+  //     // root.classList.add(isDark ? "light" : "dark");
+
+  //     const currentScheme = root.getAttribute("data-mantine-color-scheme");
+  //     const isDark = currentScheme === "light" ? "dark" : "light";
+  //     root.setAttribute("data-mantine-color-scheme", isDark);
+  //   });
+
+  //   transition.ready.then(() => {
+  //     const clipPath = [
+  //       `circle(0px at ${x}px ${y}px)`,
+  //       `circle(${endRadius}px at ${x}px ${y}px)`,
+  //     ];
+  //     document.documentElement.animate(
+  //       {
+  //         clipPath: isDark ? [...clipPath].reverse() : clipPath,
+  //       },
+  //       {
+  //         duration: 500,
+  //         easing: "ease-in",
+  //         pseudoElement: isDark
+  //           ? "::view-transition-old(root)"
+  //           : "::view-transition-new(root)",
+  //       }
+  //     );
+  //   });
+  // };
+
   useEffect(() => {
     setColorScheme(theme)
   }, [theme])
@@ -58,6 +99,12 @@ export const ContentBar = ({ model = true, children }: Props) => {
         <div className={`${styles.optionBar} nodrag`}>
           {model && (
             <>
+              {/* <button
+                className="rounded-md border p-2 outline-none  dark:border-gray-900/50 dark:bg-gray-700 dark:text-gray-100"
+                onClick={toggleTheme}
+              >
+                切换主题
+              </button> */}
               <Dropdown menu={{ items, onClick }} trigger={['click']} overlayClassName={'dropdown'}>
                 <SettingConfig className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={(e) => e.preventDefault()} />
               </Dropdown>
