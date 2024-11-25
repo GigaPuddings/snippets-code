@@ -2,17 +2,17 @@ import { ReactNode, useEffect } from 'react'
 import { CloseSmall, Logout, Minus, SettingConfig, SettingTwo, SquareSmall } from '@icon-park/react'
 import { useStore } from '@renderer/store/useStore'
 import type { MenuProps } from 'antd';
-import { Dropdown, Modal, Tooltip } from 'antd'
+import { Dropdown, Modal } from 'antd'
 import { useMantineColorScheme } from '@mantine/core';
 
 import styles from '@renderer/components/ContentBar/styles.module.scss'
-interface Props {
+import React from 'react';
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   model?: boolean
   children?: ReactNode
 }
 
-export const ContentBar = ({ model = true, children }: Props) => {
-
+export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, model = true, children }, ref) => {
   const { setColorScheme } = useMantineColorScheme();
   const [modal, contextHolder] = Modal.useModal();
   const { theme } = useStore(state => state)
@@ -94,7 +94,10 @@ export const ContentBar = ({ model = true, children }: Props) => {
 
   return (
     <>
-      <main className={`${styles.contentBar} drag`}>
+      <main
+        ref={ref}
+        className={`${styles.contentBar} drag ${className}`}
+      >
         <div className={styles.titleBar}>{children}</div>
         <div className={`${styles.optionBar} nodrag`}>
           {model && (
@@ -108,20 +111,20 @@ export const ContentBar = ({ model = true, children }: Props) => {
               <Dropdown menu={{ items, onClick }} trigger={['click']} overlayClassName={'dropdown'}>
                 <SettingConfig className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={(e) => e.preventDefault()} />
               </Dropdown>
-              <Tooltip placement="bottom" title='最小化' arrow={true}>
+              {/* <Tooltip placement="bottom" title='最小化' arrow={true}> */}
                 <Minus className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={() => window.api.minimizeWindow()} />
-              </Tooltip>
-              <Tooltip placement="bottom" title='最大化' arrow={true}>
+              {/* </Tooltip> */}
+              {/* <Tooltip placement="bottom" title='最大化' arrow={true}> */}
                 <SquareSmall className={styles.squareSmall} theme="outline" size="22" strokeWidth={3} onClick={() => window.api.maximizeWindow()} />
-              </Tooltip>
+              {/* </Tooltip> */}
             </>
           )}
-          <Tooltip placement="bottom" title='关闭' arrow={true}>
+          {/* <Tooltip placement="bottom" title='关闭' arrow={true}> */}
             <CloseSmall className={styles.closeSmall} theme="outline" size="22" strokeWidth={3} onClick={() => window.api.closeWindow()} />
-          </Tooltip>
+          {/* </Tooltip> */}
         </div>
       </main>
       {contextHolder}
     </>
   )
-}
+})
