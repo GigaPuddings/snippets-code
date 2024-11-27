@@ -41,7 +41,7 @@ export function createWindow(options: OptionsType): BrowserWindow {
   // 窗口失去焦点
   win.on('blur', () => {
     // 隐藏搜索窗口
-    // win.id === 1 && win.hide()
+    win.id === 1 && win.hide()
   })
 
   win.webContents.setWindowOpenHandler((details) => {

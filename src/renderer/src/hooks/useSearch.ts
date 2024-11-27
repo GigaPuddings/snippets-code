@@ -35,5 +35,10 @@ export default () => {
     }
   }
 
-  return { search, handleSearch }
+  const clearSearchState = () => {
+    setData([])
+    setSearch('')
+  }
+
+  return { search, handleSearch, clearSearchState }
 }

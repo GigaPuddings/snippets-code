@@ -1,8 +1,10 @@
 import { useCallback, useEffect } from 'react'
 import { useStore } from '@renderer/store/useStore'
+import useSearch from '@renderer/hooks/useSearch'
 
 export default (containerRef: React.RefObject<HTMLDivElement>) => {
-  const { data, setData, setSearch, id, setId } = useStore((state) => state)
+  const { data, id, setId } = useStore((state) => state)
+  const { clearSearchState } = useSearch()
 
   const handleKeyEvent = useCallback(
     (e: KeyboardEvent) => {
@@ -47,31 +49,29 @@ export default (containerRef: React.RefObject<HTMLDivElement>) => {
     [data, id]
   )
 
-  // 关闭搜索窗口
-  const clearSearchState = () => {
-    setData([])
-    setSearch('')
-    window.api.hideWindow('search')
-  }
 
   // 选中代码行
-  async function selectItem(type: 'click' | 'enter', item: ContentType, index: number) {
+  async function selectItem(_type: 'click' | 'enter', item: ContentType, _index: number) {
     try {
       setId(item.id) // 选中状态
 
       if (item.searchType === 'window') {
         window.api.openApp(item.content)
+        window.api.hideWindow('search')
         clearSearchState()
         return
       }
 
       // 非窗口类型处理逻辑
-      if (type === 'click') {
-        window.api.showPreviewWindow(item, index)
-      } else if (type === 'enter') {
-        await navigator.clipboard.writeText(item.content)
-        clearSearchState()
-      }
+      // if (type === 'click') {
+      //   window.api.showPreviewWindow(item, index)
+      // } else if (type === 'enter') {
+      //   await navigator.clipboard.writeText(item.content)
+      //   clearSearchState()
+      // }
+      await navigator.clipboard.writeText(item.content)
+      window.api.hideWindow('search')
+      clearSearchState()
     } catch (error) {
       console.error('Error handling selectItem:', error)
     }

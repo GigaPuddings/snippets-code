@@ -5,14 +5,16 @@ import { tags as t } from '@lezer/highlight';
 import { createTheme, type CreateThemeOptions } from '@uiw/codemirror-themes';
 import { useMantineColorScheme } from '@mantine/core';
 
+type ThemeType = 'dark' | 'light'
 
 const CodeMirrorEditor: React.FC<ReactCodeMirrorProps> = (options) => {
 
-  const [type, setType] = useState<'light' | 'dark'>('light');
+  const [type, setType] = useState<ThemeType>('light');
   const { colorScheme } = useMantineColorScheme();
 
   useEffect(() => {
-    setType(colorScheme === 'light' || colorScheme === 'dark' ? colorScheme : 'light');
+    const activeTheme = document.documentElement.getAttribute('data-mantine-color-scheme')!
+    setType(activeTheme as ThemeType);
   }, [colorScheme]);
 
   const themeOptions = useMemo(() => {
