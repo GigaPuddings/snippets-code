@@ -20,7 +20,7 @@ a:hover {
 
 // 代码块样式
 .code-mirror {
-  @apply relative dark:bg-[#282d32] z-0 overflow-auto h-[calc(100vh-84px)] bg-slate-50 mr-1;
+  @apply relative dark:bg-[#282d32] z-0 overflow-auto h-[calc(100vh-84px)] mr-1;
 }
 
 // 代码块隐藏序列右边框
