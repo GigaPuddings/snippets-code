@@ -13,6 +13,7 @@ declare global {
       sql: <T>(sql: string, type: SqlActionType, params?: Record<string, any>) => Promise<T>
       openWindow: (name: WindowNameType, options?: any) => void
       hideWindow: (name: WindowNameType) => void
+      setAlwaysOnTop: (flag: boolean) => void
       maximizeWindow: () => void
       minimizeWindow: () => void
       closeWindow: () => void

@@ -1,5 +1,5 @@
-import { ReactNode, useEffect } from 'react'
-import { CloseSmall, Logout, Minus, SettingConfig, SettingTwo, SquareSmall } from '@icon-park/react'
+import { ReactNode, useEffect, useState } from 'react'
+import { CloseSmall, Logout, Minus, Pushpin, SettingConfig, SettingTwo, SquareSmall } from '@icon-park/react'
 import { useStore } from '@renderer/store/useStore'
 import type { MenuProps } from 'antd';
 import { Dropdown, Modal } from 'antd'
@@ -16,6 +16,8 @@ export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, 
   const { setColorScheme } = useMantineColorScheme();
   const [modal, contextHolder] = Modal.useModal();
   const { theme } = useStore(state => state)
+  const [ hasTop, setHasTop ] = useState(false) // 窗口是否置顶
+
 
   // const toggleTheme = (event: MouseEvent) => {
   //   const x = event.clientX;
@@ -61,6 +63,12 @@ export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, 
   useEffect(() => {
     setColorScheme(theme)
   }, [theme])
+
+  // 点击置顶
+  const handleClickTop = () => {
+    setHasTop(!hasTop)
+    window.api.setAlwaysOnTop(hasTop)
+  }
 
   const items: MenuProps['items'] = [
     {
@@ -108,6 +116,7 @@ export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, 
               >
                 切换主题
               </button> */}
+              <Pushpin className={hasTop ? styles.notTop : styles.top} theme="outline" size="18" strokeWidth={3} onClick={() => handleClickTop()} />
               <Dropdown menu={{ items, onClick }} trigger={['click']} overlayClassName={'dropdown'}>
                 <SettingConfig className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={(e) => e.preventDefault()} />
               </Dropdown>

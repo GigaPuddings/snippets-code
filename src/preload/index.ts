@@ -56,6 +56,10 @@ const api = {
   hideWindow: (name: WindowNameType) => {
     ipcRenderer.send('hideWindow', name)
   },
+  // 设置窗口置顶
+  setAlwaysOnTop: (flag: boolean) => {
+    ipcRenderer.send('set-always-on-top', flag)
+  },
   // 窗口最大化
   maximizeWindow: () => ipcRenderer.send('maximize-window'),
   //  窗口最小化

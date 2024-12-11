@@ -14,6 +14,15 @@
   @apply flex h-full items-center gap-4;
 }
 
+.top {
+  @include commonIcon;
+  @apply  text-[20px] p-1 text-[#4b94f8] dark:text-[#5977cb];
+}
+.notTop {
+  @include commonIcon;
+  @apply text-[20px] p-1 dark:text-[#999b9d];
+}
+
 .minus {
   @include commonIcon;
   @apply text-[20px] p-1 dark:text-[#999b9d];

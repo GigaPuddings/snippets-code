@@ -1,15 +1,12 @@
+import { promisify } from 'util'
 import { app, ipcMain, IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 import { getWindowByEvent, getByNameWindow } from './windows'
 import logger from 'electron-log'
 import { exec } from 'child_process'
 import config from './config'
 import { join } from 'path'
-// import { winConfig } from './windows'
-
-const { promisify } = require('util')
 
 const execAsync = promisify(exec)
-
 
 logger.transports.console.level = false // 控制台关闭输出（只输出到文件）
 logger.transports.file.level = 'silly'
@@ -69,6 +66,15 @@ ipcMain.on('close-window', (event: IpcMainEvent) => {
   getWindowByEvent(event).close()
 })
 
+// 设置窗口置顶
+ipcMain.on('set-always-on-top', (event, flag) => {
+  const win = getWindowByEvent(event)
+  if (win) {
+    logger.info(`设置config窗口置顶：${flag}`)
+    win.setAlwaysOnTop(flag)
+  }
+})
+
 // 退出应用
 ipcMain.on('window-quit', function () {
   app.quit()
@@ -107,14 +113,20 @@ ipcMain.handle('search-local-apps', async (_event: IpcMainInvokeEvent, term: str
       return []
     }
 
-    // return config.apps
+    // 高级模糊查询config.apps
+    const filtered = config.apps.filter(app => {
+      // 将应用名称和显示图标转为小写
+      const lowercaseAppName = app.appName.toLowerCase()
+      const lowercaseDisplayIcon = app.DisplayIcon ? app.DisplayIcon.toLowerCase() : ''
 
-    // 构造正则表达式
-    const regex = new RegExp(lowerTerm.split(' ').join('.*?'), 'i')
+      // 将应用名称按常见分隔符拆分为单个词
+      const appNameTerms = lowercaseAppName.split(/[^\w]+/)
 
-    const filtered = config.apps.filter((app) => {
-      // 检查 appName 和 DisplayIcon 是否符合正则表达式
-      return regex.test(app.appName) || (app.DisplayIcon && regex.test(app.DisplayIcon))
+      // 检查搜索词的每个部分是否在应用名称的任一单词中出现，或整个搜索词在显示图标中出现
+      return lowerTerm.split(/\s+/).every(term =>
+        appNameTerms.some(appTerm => appTerm.includes(term)) ||
+        lowercaseDisplayIcon.includes(lowerTerm)
+      )
     })
 
     // 返回匹配结果

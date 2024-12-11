@@ -3,14 +3,17 @@ import { CategoryItem } from '@renderer/components/CategoryItem'
 import { QuickNav } from '@renderer/components/QuickNav'
 import { FolderPlus, SortAmountDown, SortAmountUp } from '@icon-park/react'
 import { Tooltip } from 'antd'
-import { useState } from 'react'
+import { HTMLAttributes, useState } from 'react'
 import './category.scss'
+import { IIcon } from '@icon-park/react/lib/runtime'
+import { JSX } from 'react/jsx-runtime'
 
 export default () => {
   const initialCategories = useLoaderData() as CategoryType[]
   const fetcher = useFetcher()
   const submit = useSubmit()
   const [fileSort, setFileSort] = useState<string>('desc')
+  const [isHovering, setIsHovering] = useState(false);
 
   // 数据来源：优先从 fetcher.data 获取最新数据，否则使用初始加载的数据
   const categories = fetcher.data || initialCategories
@@ -23,11 +26,15 @@ export default () => {
   }
 
   // 排序图标组件
-  const SortIcon = () => (
+  const SortIcon = (props: JSX.IntrinsicAttributes & IIcon & Omit<HTMLAttributes<HTMLSpanElement>, keyof IIcon>) => (
     fileSort === 'desc' ? (
-      <SortAmountUp onClick={handleOrder} className='icon' theme="outline" size="16" />
+      <SortAmountUp
+        {...props}
+      />
     ) : (
-      <SortAmountDown onClick={handleOrder} className='icon' theme="outline" size="16" />
+      <SortAmountDown
+        {...props}
+      />
     )
   )
 
@@ -47,8 +54,20 @@ export default () => {
                   onClick={() => submit(null, { method: 'POST' })}
                 />
               </Tooltip>
-              <Tooltip placement="bottom" title={fileSort === 'desc' ? '降序' : '升序'} arrow={true}>
-                <SortIcon />
+              <Tooltip
+                placement="bottom"
+                title={fileSort === 'desc' ? '降序' : '升序'}
+                arrow={true}
+                open={isHovering}
+              >
+                <SortIcon
+                  onClick={handleOrder}
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                  className='icon'
+                  theme="outline"
+                  size="16"
+                />
               </Tooltip>
             </div>
           </div>
