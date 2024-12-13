@@ -1,88 +1,58 @@
 import { Registry } from "./utils/registry";
 
-export function getInstalledApps() {
-  return new Promise(async (resolve, _reject) => {
-    let HKLM_SOFTWARE_Microsoft: any = [];
-    let HKLM_SOFTWARE_Wow6432Node_Microsoft: any = [];
-    let HKCU_SOFTWARE_Microsoft: any = [];
-    let HKCU_SOFTWARE_Wow6432Node_Microsoft: any = [];
-    try {
-      HKLM_SOFTWARE_Microsoft = await getApps(
-        new Registry({
-          hive: Registry.HKLM,
-          key: "\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
-        })
-      );
-    } catch (err) {
-      console.error("HKLM_SOFTWARE_Microsoft err", err);
-    }
+// 将正则表达式移到外部，避免重复创建
+const guidRegex = /^\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}$/i;
 
-    try {
-      HKLM_SOFTWARE_Wow6432Node_Microsoft = await getApps(
-        new Registry({
-          hive: Registry.HKLM,
-          key: "\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
-        })
-      );
-    } catch (err) {
-      console.error("HKLM_SOFTWARE_Wow6432Node_Microsoft err", err);
-    }
+export async function getInstalledApps() {
+  const keys = [
+    { hive: Registry.HKLM, key: "\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" },
+    { hive: Registry.HKLM, key: "\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall" },
+    { hive: Registry.HKCU, key: "\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall" },
+    { hive: Registry.HKCU, key: "\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall" }
+  ];
 
+  let apps = [];
+  for (const { hive, key } of keys) {
     try {
-      HKCU_SOFTWARE_Microsoft = await getApps(
-        new Registry({
-          hive: Registry.HKCU,
-          key: "\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
-        })
-      );
+      const registryApps: any = await getApps(new Registry({ hive, key }));
+      apps = apps.concat(registryApps);
     } catch (err) {
-      console.error("HKCU_SOFTWARE_Microsoft err", err);
+      console.error(`Error fetching apps from ${key}:`, err);
     }
+  }
 
-    try {
-      HKCU_SOFTWARE_Wow6432Node_Microsoft = await getApps(
-        new Registry({
-          hive: Registry.HKCU,
-          key: "\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
-        })
-      );
-    } catch (err) {
-      console.error("HKCU_SOFTWARE_Wow6432Node_Microsoft err", err);
-    }
-
-    resolve(
-      [
-        ...HKLM_SOFTWARE_Microsoft,
-        ...HKLM_SOFTWARE_Wow6432Node_Microsoft,
-        ...HKCU_SOFTWARE_Microsoft,
-        ...HKCU_SOFTWARE_Wow6432Node_Microsoft,
-      ].filter((o) => o.appName)
-    );
-  });
+  return filterAndTransformApps(apps);
 }
 
-export function getApps(regKey: any) {
-  return new Promise((resolve) => {
+function filterAndTransformApps(apps) {
+  return apps.reduce((result, app) => {
+    if (app.appIdentifier && !guidRegex.test(app.appIdentifier)) {
+      if (app.DisplayName && app.DisplayIcon) {
+        result.push({
+          appName: app.DisplayName,
+          DisplayIcon: app.DisplayIcon.replace(/,.*$/g, '').replace(/ico$/g, 'exe')
+        });
+      }
+    }
+    return result;
+  }, []);
+}
+
+export async function getApps(regKey: any) {
+  return new Promise(async (resolve, reject) => {
     try {
-      regKey.keys(function (err: Error, key: any) {
+      regKey.keys((err: any, keys: any) => {
         if (err) {
-          console.error(err);
-          resolve([]);
-        }
-        if (key) {
-          const getAppItems = key.map((o: any) => {
-            return getAppData(o);
-          });
-          Promise.all(getAppItems).then((res) => {
-            resolve(res);
-          });
+          console.error("Error fetching registry keys:", err);
+          reject([]);
         } else {
-          resolve([]);
+          const appItems = keys.map(getAppData);
+          resolve(Promise.all(appItems));
         }
       });
     } catch (err) {
-      console.error("getAppItems err", err);
-      resolve([]);
+      console.error("Error fetching registry keys:", err);
+      reject([]);
     }
   });
 }
@@ -91,31 +61,19 @@ export function getAppData(appKey) {
   return new Promise((resolve) => {
     let app: any = {};
     try {
-      let keyArr = appKey.key.split("\\");
-      app.appIdentifier = keyArr[keyArr.length - 1];
+      app.appIdentifier = appKey.key.split("\\").pop();
       appKey.values((_e: any, items: any) => {
         if (items) {
-          for (var i = 0; i < items.length; i++) {
-            if (items[i].value) {
-              app[items[i].name] = items[i].value
-            }
-            if (items[i].name === "DisplayName") {
-              app.appName = items[i].value;
-            }
-            if (items[i].name === "DisplayVersion") {
-              app.appVersion = items[i].value;
-            }
-            if (items[i].name === "InstallDate") {
-              app.appInstallDate = items[i].value;
-            }
-            if (items[i].name === "Publisher") {
-              app.appPublisher = items[i].value;
+          for (const item of items) {
+            if (item.value) {
+              app[item.name] = item.value;
             }
           }
         }
         resolve(app);
       });
     } catch (err) {
+      console.error("Error processing app data:", err);
       resolve(app);
     }
   });

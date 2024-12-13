@@ -17,21 +17,21 @@ export default function Result() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { data, id, selectItem } = useSelect(containerRef);
 
-  const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
-    const container = containerRef.current;
-    const rect = container!.getBoundingClientRect(); // 获取容器边界信息
+  // const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+  //   const container = containerRef.current;
+  //   const rect = container!.getBoundingClientRect(); // 获取容器边界信息
 
-    // 判断鼠标是否在容器右侧移出
-    if (event.clientX >= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom) {
-      return
-    }
+  //   // 判断鼠标是否在容器右侧移出
+  //   if (event.clientX >= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom) {
+  //     return
+  //   }
 
-    // 阻止事件冒泡
-    event.stopPropagation();
+  //   // 阻止事件冒泡
+  //   event.stopPropagation();
 
-    window.api.hidePreviewWindow(); // 隐藏窗口
-    window.api.removePreviewContent(); // 移出监听
-  };
+  //   window.api.hidePreviewWindow(); // 隐藏窗口
+  //   window.api.removePreviewContent(); // 移出监听
+  // };
 
   const handleClick = (event: MouseEvent<HTMLDivElement>, item: ContentType, index: number) => {
     event.preventDefault();
@@ -39,10 +39,10 @@ export default function Result() {
   };
 
   return (
+    // onMouseLeave={handleMouseLeave}
     <main
       ref={containerRef}
       className={`${styles.main} ${data.length ? 'mt-3' : ''}`}
-      onMouseLeave={handleMouseLeave}
     >
       {
         data.map((item, index) => (

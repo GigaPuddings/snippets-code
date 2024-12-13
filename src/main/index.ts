@@ -16,6 +16,12 @@ import { dbPath } from './db/connect'
 //初始化并准备创建浏览器窗口。
 //有些API只有在该事件发生后才能使用。
 app.whenReady().then(async () => {
+  // 获取本地应用程序
+  getInstalledApps().then((data: any) => {
+    console.log(data);
+
+    config.apps = data
+  })
   // 创建第一个初始搜索窗口
   const win = getByNameWindow('search')
 
@@ -42,17 +48,6 @@ app.whenReady().then(async () => {
 
   // 版本更新初始化
   // autoUpdateInit()
-
-  // config.apps = await getInstalledApps() as Array<any>
-
-  // D:\Program Files\ScreenToGif\ScreenToGif.exe
-  // 获取系统已安装程序
-  const allApp = (await getInstalledApps()) as Array<any>
-  // logger.info(allApp)
-  //  && !app.appIdentifier.startsWith('{')
-  // config.apps = allApp
-  // 筛选可调用App
-  config.apps = allApp.filter((app) => app.DisplayIcon)
 
   // 检查更新
   // autoUpdateApp(win)

@@ -106,10 +106,10 @@ ipcMain.handle('set-auto-launch', (_event: IpcMainInvokeEvent, enable: boolean) 
 // 搜索应用
 ipcMain.handle('search-local-apps', async (_event: IpcMainInvokeEvent, term: string) => {
   try {
-    const lowerTerm = term.toLowerCase().trim()
+    const trimmedTerm = term.trim()
 
     // 如果输入为空，直接返回空数组
-    if (!lowerTerm) {
+    if (!trimmedTerm) {
       return []
     }
 
@@ -119,14 +119,11 @@ ipcMain.handle('search-local-apps', async (_event: IpcMainInvokeEvent, term: str
       const lowercaseAppName = app.appName.toLowerCase()
       const lowercaseDisplayIcon = app.DisplayIcon ? app.DisplayIcon.toLowerCase() : ''
 
-      // 将应用名称按常见分隔符拆分为单个词
-      const appNameTerms = lowercaseAppName.split(/[^\w]+/)
+      // 使用正则表达式来支持中文和其他字符
+      const regex = new RegExp(trimmedTerm.split(/\s+/).join('|'), 'i');
 
-      // 检查搜索词的每个部分是否在应用名称的任一单词中出现，或整个搜索词在显示图标中出现
-      return lowerTerm.split(/\s+/).every(term =>
-        appNameTerms.some(appTerm => appTerm.includes(term)) ||
-        lowercaseDisplayIcon.includes(lowerTerm)
-      )
+      // 检查搜索词是否在应用名称或显示图标中出现
+      return regex.test(lowercaseAppName) || regex.test(lowercaseDisplayIcon);
     })
 
     // 返回匹配结果
