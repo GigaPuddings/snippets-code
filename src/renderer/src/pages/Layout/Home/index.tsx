@@ -16,8 +16,7 @@ function Home(): JSX.Element {
     setIgnoreMouseEvents(mainRef as MutableRefObject<HTMLDivElement>)
 
     // 注册快捷键
-    window.api.shortCut(shortCut.search, 'search')
-    window.api.shortCut(shortCut.config, 'config')
+    window.api.shortCut([{ hotkey: shortCut.search, type: 'search' }, { hotkey: shortCut.config, type: 'config' }])
 
     // 初始化存储数据
     window.api.initTable()

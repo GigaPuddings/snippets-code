@@ -7,7 +7,7 @@ declare global {
       on: (channel: Channels, func: (...args: unknown[]) => void) => void
       onDownloadProgress: (callback: Function) => void
       onUpdateDownloaded: (callback: Function) => void
-      shortCut: (shortCut: string, type: ShortCutType) => Promise<boolean>
+      shortCut: (shortCut: ShortCutType, type?: ShortCutTypeTarget) => void
       setIgnoreMouseEvents: (ignore: boolean, options?: { forward: boolean }) => void
       openConfigWindow: () => void
       sql: <T>(sql: string, type: SqlActionType, params?: Record<string, any>) => Promise<T>

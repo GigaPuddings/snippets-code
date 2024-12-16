@@ -25,7 +25,7 @@ export default () => {
   ];
   return (
     <>
-      <ContentBar model={false}>软件配置</ContentBar>
+      <ContentBar model={false} title="软件配置" />
       <Tabs
         className="h-[calc(100vh-40px)]"
         defaultActiveKey="1"

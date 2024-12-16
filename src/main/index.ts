@@ -18,8 +18,6 @@ import { dbPath } from './db/connect'
 app.whenReady().then(async () => {
   // 获取本地应用程序
   getInstalledApps().then((data: any) => {
-    console.log(data);
-
     config.apps = data
   })
   // 创建第一个初始搜索窗口
@@ -40,7 +38,7 @@ app.whenReady().then(async () => {
     }
 
     // 显示窗口
-    win.show()
+    // win.show()
   })
 
   // 托盘图标

@@ -1,3 +1,6 @@
+@mixin commonIcon {
+  @apply cursor-pointer text-slate-700 hover:bg-gray-200 dark:hover:bg-[--mantine-color-default-hover] hover:rounded;
+}
 .content-page {
   @apply bg-white dark:bg-[#282d32] h-screen text-xs text-slate-700;
   .list {
@@ -8,5 +11,13 @@
         @apply flex flex-col gap-2 py-2;
       }
     }
+  }
+  .top {
+    @include commonIcon;
+    @apply  text-[20px] p-1 text-[#4b94f8] dark:text-[#5977cb];
+  }
+  .notTop {
+    @include commonIcon;
+    @apply text-[20px] p-1 dark:text-[#999b9d];
   }
 }

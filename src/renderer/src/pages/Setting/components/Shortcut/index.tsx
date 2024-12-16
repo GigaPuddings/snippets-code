@@ -6,7 +6,7 @@ import styles from '../../style.module.scss';
 
 export const Shortcut: React.FC = () => {
 
-  const [shortCutType, setShortCutType] = useState<ShortCutType>('search')
+  const [shortCutType, setShortCutType] = useState<ShortCutTypeTarget>('search')
   const { config, setConfig } = useStore(state => state);
 
   const { shortCut } = config
@@ -14,7 +14,7 @@ export const Shortcut: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); // 设置快捷键模态框
 
   // 打开快捷键设置弹框
-  const showModal = (type: ShortCutType) => {
+  const showModal = (type: ShortCutTypeTarget) => {
     setShortCutType(type)
     setIsModalVisible(true);
   };

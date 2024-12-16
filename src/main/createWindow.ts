@@ -15,7 +15,7 @@ export interface OptionsType extends Partial<BrowserWindowConstructorOptions> {
 export function createWindow(options: OptionsType): BrowserWindow {
   const { width: screenWidth } = screen.getPrimaryDisplay().workAreaSize
   const x = Math.floor((screenWidth - 500) / 2) // 水平居中
-  const win = new BrowserWindow({
+  let win: any = new BrowserWindow({
     width: 500,
     height: 383,
     x,
@@ -44,10 +44,20 @@ export function createWindow(options: OptionsType): BrowserWindow {
     win.id === 1 && win.hide()
   })
 
+  win.on('closed', () => {
+    win = null;
+  })
+
   win.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
+
+  win.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+    details.requestHeaders['Cache-Control'] = 'max-age=3600'; // 设置缓存有效期为1小时
+    callback({ requestHeaders: details.requestHeaders });
+  });
+
 
   const loadUrl =
     is.dev && process.env['ELECTRON_RENDERER_URL']

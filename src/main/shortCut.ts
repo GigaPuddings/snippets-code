@@ -4,11 +4,17 @@ import config from './config'
 import { is } from '@electron-toolkit/utils'
 
 // 注册快捷键
-ipcMain.handle('shortCut', (_event: IpcMainInvokeEvent, shortCut: string, type: ShortCutType) => {
-  return registerSearchShortCut(shortCut, type)
+ipcMain.on('shortCut', (_event: IpcMainInvokeEvent, shortCut: ShortCutType, type?: ShortCutTypeTarget) => {
+  if (Array.isArray(shortCut)) {
+    shortCut.forEach(item => {
+      registerSearchShortCut(item.hotkey, item.type)
+    })
+  } else if(typeof shortCut === 'string' && type) {
+    registerSearchShortCut(shortCut, type)
+  }
 })
 
-export function registerSearchShortCut(shortCut: string, type: ShortCutType) {
+export function registerSearchShortCut(shortCut: string, type: ShortCutTypeTarget) {
   if (shortCut && globalShortcut.isRegistered(shortCut)) {
     !is.dev && dialog.showErrorBox('温馨提示', '快捷键注册失败, 请检查快捷键是否已禁用')
     return false

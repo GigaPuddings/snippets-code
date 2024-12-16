@@ -1,6 +1,6 @@
 {
   "name": "snippets-code",
-  "version": "1.2.6",
+  "version": "1.0.6",
   "description": "This is a code snippet tool",
   "main": "./out/main/index.js",
   "author": "cxy",

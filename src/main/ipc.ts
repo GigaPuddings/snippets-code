@@ -128,7 +128,7 @@ ipcMain.handle('search-local-apps', async (_event: IpcMainInvokeEvent, term: str
 
     // 返回匹配结果
     return filtered.map((b) => ({
-      id: Math.random(),
+      id: b.appName || Math.random(),
       title: b.appName,
       content: b.DisplayIcon,
       category_id: '',

@@ -36,8 +36,8 @@ const api = {
     };
   },
   // 注册自定义快捷键
-  shortCut: (shortCut: string, type: ShortCutType) => {
-    return ipcRenderer.invoke('shortCut', shortCut, type)
+  shortCut: (shortCut: ShortCutType, type?: ShortCutTypeTarget) => {
+    return ipcRenderer.send('shortCut', shortCut, type)
   },
   // 鼠标穿透
   setIgnoreMouseEvents: (ignore: boolean, options?: { forward: boolean }) => {

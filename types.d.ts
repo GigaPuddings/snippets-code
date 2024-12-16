@@ -35,7 +35,14 @@ type ConfigDataType = {
   databaseDirectory: string
 }
 
-type ShortCutType = 'search' | 'config'
+type ShortCutTypeTarget = 'search' | 'config'
+
+interface ShortCutArrayType {
+  hotkey: string
+  type: ShortCutTypeTarget
+}
+
+type ShortCutType = string | ShortCutArrayType[]
 
 type WindowNameType = 'search' | 'config' | 'setting' | 'preview' | 'notice'
 

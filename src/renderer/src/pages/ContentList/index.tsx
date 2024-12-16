@@ -4,10 +4,19 @@ import { ContentItem } from '@renderer/components/ContentItem';
 import './contentList.scss'
 import { ContentBar } from '@renderer/components/ContentBar';
 import { Splitter } from 'antd';
+import { Pushpin } from '@icon-park/react';
+import { useState } from 'react';
 
 export default () => {
   // 获取片段列表
   const contents = useLoaderData() as ContentType[]
+  const [ hasTop, setHasTop ] = useState(true) // 窗口是否置顶
+
+  // 点击置顶
+  const handleClickTop = () => {
+    setHasTop(!hasTop)
+    window.api.setAlwaysOnTop(hasTop)
+  }
 
   return (
     <Splitter>
@@ -22,7 +31,9 @@ export default () => {
         </div>
       </Splitter.Panel>
       <Splitter.Panel>
-        <ContentBar />
+        <ContentBar >
+          <Pushpin className={hasTop ? 'notTop' : 'top'} theme="outline" size="18" strokeWidth={3} onClick={() => handleClickTop()} />
+        </ContentBar>
         <Outlet />
       </Splitter.Panel>
     </Splitter>

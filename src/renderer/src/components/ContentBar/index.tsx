@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useState } from 'react'
-import { CloseSmall, Logout, Minus, Pushpin, SettingConfig, SettingTwo, SquareSmall } from '@icon-park/react'
+import { ReactNode, useEffect } from 'react'
+import { CloseSmall, Logout, Minus, SettingConfig, SettingTwo, SquareSmall } from '@icon-park/react'
 import { useStore } from '@renderer/store/useStore'
 import type { MenuProps } from 'antd';
 import { Dropdown, Modal } from 'antd'
@@ -8,15 +8,15 @@ import { useMantineColorScheme } from '@mantine/core';
 import styles from '@renderer/components/ContentBar/styles.module.scss'
 import React from 'react';
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  title?: string
   model?: boolean
   children?: ReactNode
 }
 
-export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, model = true, children }, ref) => {
+export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, title, model = true, children }, ref) => {
   const { setColorScheme } = useMantineColorScheme();
   const [modal, contextHolder] = Modal.useModal();
   const { theme } = useStore(state => state)
-  const [ hasTop, setHasTop ] = useState(false) // 窗口是否置顶
 
 
   // const toggleTheme = (event: MouseEvent) => {
@@ -64,12 +64,6 @@ export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, 
     setColorScheme(theme)
   }, [theme])
 
-  // 点击置顶
-  const handleClickTop = () => {
-    setHasTop(!hasTop)
-    window.api.setAlwaysOnTop(hasTop)
-  }
-
   const items: MenuProps['items'] = [
     {
       label: '设置',
@@ -106,7 +100,7 @@ export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, 
         ref={ref}
         className={`${styles.contentBar} drag ${className}`}
       >
-        <div className={styles.titleBar}>{children}</div>
+        <div className={styles.titleBar}>{title}</div>
         <div className={`${styles.optionBar} nodrag`}>
           {model && (
             <>
@@ -116,7 +110,7 @@ export const ContentBar = React.forwardRef<HTMLDivElement, Props>(({ className, 
               >
                 切换主题
               </button> */}
-              <Pushpin className={hasTop ? styles.notTop : styles.top} theme="outline" size="18" strokeWidth={3} onClick={() => handleClickTop()} />
+              {children}
               <Dropdown menu={{ items, onClick }} trigger={['click']} overlayClassName={'dropdown'}>
                 <SettingConfig className={styles.minus} theme="outline" size="18" strokeWidth={3} onClick={(e) => e.preventDefault()} />
               </Dropdown>
