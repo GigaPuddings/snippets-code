@@ -27,7 +27,7 @@ const CodeMirrorEditor: React.FC<ReactCodeMirrorProps> = (options) => {
           gutterBackground: '#ffffff',
         }
         : {
-          background: '#292A30',
+          background: '#282d32',
           foreground: '#CECFD0',
           caret: '#fff',
           selection: '#727377',
