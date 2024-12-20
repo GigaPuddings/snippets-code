@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { Registry } from "./utils/registry";
 
 // 将正则表达式移到外部，避免重复创建
@@ -24,17 +25,18 @@ export async function getInstalledApps() {
   return filterAndTransformApps(apps);
 }
 
-function filterAndTransformApps(apps) {
-  return apps.reduce((result, app) => {
-    if (app.appIdentifier && !guidRegex.test(app.appIdentifier)) {
+function filterAndTransformApps(apps: any[]) {
+  return apps.reduce((result: any[], app: any) => {
+    //  && !guidRegex.test(app.appIdentifier)
+    if (app.appIdentifier) {
       if (app.DisplayName && app.DisplayIcon) {
         result.push({
           appName: app.DisplayName,
-          DisplayIcon: app.DisplayIcon.replace(/,.*$/g, '').replace(/ico$/g, 'exe')
+          DisplayIcon: app.DisplayIcon.replace(/.*?([A-Z]:\\[^,]+(?:\.exe|\.ico)).*/, '$1')
         });
       }
     }
-    return result;
+    return result.filter(app => app.DisplayIcon && existsSync(app.DisplayIcon));
   }, []);
 }
 
