@@ -25,7 +25,6 @@ declare global {
       selectDatabaseDirectory: () => Promise<string>
       getDatabaseDirectory: () => Promise<string>
       setDatabaseDirectory: (path: string) => void
-      initTable: () => void
       backupDatabase: (backupType: string) => Promise<string>
       restoreDatabase: ()  => Promise<string>
       setAutoLaunch: (isAutoLaunch: boolean)  => Promise<boolean>

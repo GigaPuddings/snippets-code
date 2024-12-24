@@ -83,10 +83,6 @@ const api = {
 
     ipcRenderer.send('setDatabaseDirectory', path)
   },
-  // 表初始化
-  initTable: () => {
-    ipcRenderer.send('initTable')
-  },
   // 备份数据
   backupDatabase: async (backupType: number) => {
     try {

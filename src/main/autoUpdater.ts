@@ -4,15 +4,6 @@ import { autoUpdater } from 'electron-updater'
 import logger from 'electron-log/main'
 import { getLocalData, setLocalData, sleep } from './helper'
 
-
-// 打印更新相关的 log 到本地
-logger.transports.console.level = false // 控制台关闭输出（只输出到文件）
-logger.transports.file.level = 'silly'
-logger.transports.file.maxSize = 1002430 // 文件最大不超过 1M
-logger.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} {text}'
-logger.transports.file.resolvePathFn = () => join(app.getPath('logs'), 'auto-update.log') // 在程序的安装目录（生产），或代码根目录（开发）的 log 文件夹下打印日志。
-logger.initialize()
-
 export async function autoUpdateInit() {
 
   // 根据平台设置更新 URL

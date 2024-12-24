@@ -4,16 +4,9 @@ import { getWindowByEvent, getByNameWindow } from './windows'
 import logger from 'electron-log'
 import { exec } from 'child_process'
 import config from './config'
-import { join } from 'path'
+import { existsSync } from 'node:fs'
 
 const execAsync = promisify(exec)
-
-logger.transports.console.level = false // 控制台关闭输出（只输出到文件）
-logger.transports.file.level = 'silly'
-logger.transports.file.maxSize = 1002430 // 文件最大不超过 1M
-logger.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} {text}'
-logger.transports.file.resolvePathFn = () => join(app.getPath('logs'), 'auto-update.log') // 在程序的安装目录（生产），或代码根目录（开发）的 log 文件夹下打印日志。
-logger.initialize()
 
 // 创建窗体
 ipcMain.on('openWindow', (_event: IpcMainInvokeEvent, name: WindowNameType, options?: any) => {

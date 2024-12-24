@@ -8,7 +8,7 @@ type CategoryType = {
 
 type ThemeType = 'dark' | 'light' | 'auto';
 
-type LocalDataType = 'updater' | 'databaseDirectory'
+type LocalDataType = 'updater' | 'databaseDirectory' | 'isFirstStart'
 
 type SearchType = 'config' | 'window'
 

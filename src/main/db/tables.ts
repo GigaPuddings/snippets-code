@@ -1,6 +1,8 @@
 import { db } from './connect'
 
+// 初始化表
 export function initTable() {
+  // 创建分类表
   db().exec(`
   create table if not exists categories (
     id integer primary key autoincrement not null,
@@ -9,6 +11,7 @@ export function initTable() {
   );
 `)
 
+  // 创建内容表
   db().exec(`
   create table if not exists contents (
     id integer primary key autoincrement not null,

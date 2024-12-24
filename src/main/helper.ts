@@ -7,6 +7,7 @@ const dataPath = join(app.getPath('userData'), 'data.json');
 export function getLocalData(key?: LocalDataType) {
   if (!fs.existsSync(dataPath)) {
     fs.writeFileSync(dataPath, JSON.stringify({
+      isFirstStart: true,
       databaseDirectory: ''
     }), { encoding: 'utf-8' });
   }

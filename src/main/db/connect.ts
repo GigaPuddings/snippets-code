@@ -1,9 +1,10 @@
 import { dialog, app } from 'electron'
 import Database, * as BetterSqlite3 from 'better-sqlite3'
-import { copyFileSync, existsSync, mkdirSync } from 'fs'
-import { join } from 'path'
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 import config from '../config'
 import { getLocalData, setLocalData } from '../helper'
+import logger from 'electron-log/main'
 
 const ERROR_MESSAGES = {
   DATABASE_PATH_INVALID: '自定义数据库路径不合法或损坏，程序将回退到默认路径。',
@@ -12,23 +13,52 @@ const ERROR_MESSAGES = {
   BACKUP_FILE_NOT_FOUND: '选中的备份文件不存在，请确认文件路径。'
 }
 
-// 检查并创建目录的通用函数
-export function createDataFolder(): string {
-  const dataFolderPath = join(app.getPath('userData'), 'Data')
-  if (!existsSync(dataFolderPath)) {
-    mkdirSync(dataFolderPath, { recursive: true })
-  }
-  return dataFolderPath
-}
+// 是否第一次启动应用
+const isFirstStart = getLocalData('isFirstStart')
 
 // 路径或数据无效，给出反馈
 function databaseErrorMessage(): void {
   if (!config.hasShownError) {
     dialog.showErrorBox('数据存储有误', ERROR_MESSAGES.DATABASE_PATH_INVALID)
     config.hasShownError = true
+    // 初始化第一次启动应用
+    setLocalData('isFirstStart', true)
+    // 初始化数据库路径
     setLocalData('databaseDirectory', '')
   }
 }
+
+// 检查并创建目录的通用函数
+export function createDataFolder(): string {
+  const userDataPath = app.getPath('userData');
+  const dataFolderPath = join(userDataPath, 'Data');
+  const dbPath = join(dataFolderPath, 'code.db');
+
+  let folderOrFileMissing = false; // 用于检测是否有文件或文件夹缺失
+
+  // 确保Data文件夹存在
+  if (!existsSync(dataFolderPath)) {
+    logger.info('Data文件夹不存在，创建一个')
+    mkdirSync(dataFolderPath, { recursive: true });
+    folderOrFileMissing = true; // 标记文件夹缺失
+  }
+
+  // 确保code.db文件存在
+  if (!existsSync(dbPath)) {
+    logger.info('code.db文件不存在，创建一个空的数据库文件')
+    writeFileSync(dbPath, ''); // 创建一个空的数据库文件
+    folderOrFileMissing = true; // 标记文件缺失
+  }
+
+  // 如果任一文件或文件夹被创建，说明原本不存在，需要显示错误消息
+  if (folderOrFileMissing && !isFirstStart) {
+    databaseErrorMessage(); // 调用错误消息方法
+  }
+
+  return dbPath; // 返回数据库文件的路径
+}
+
+
 
 // 读取文件数据
 const { databaseDirectory } = getLocalData()
@@ -51,25 +81,27 @@ function checkDatabaseIntegrity(dbPath: string): boolean {
 // 获取数据库路径的函数
 function getDatabasePath(): string {
   // 默认数据库路径
-  let dbPath = join(createDataFolder(), 'code.db')
-
+  let dbPath = null
+  // let dbPath = join(createDataFolder(), 'code.db'
   // 检查用户提供的自定义数据库路径
   if (databaseDirectory) {
     // 自定义路径有效
     if (isValidDatabasePath(databaseDirectory)) {
       // 文件是否损坏
       if (checkDatabaseIntegrity(databaseDirectory)) {
+        // 自定义路径有效
         dbPath = databaseDirectory
       } else {
+        logger.error('数据库损坏，回退到默认路径')
         databaseErrorMessage()
       }
-      dbPath = databaseDirectory
     } else {
+      logger.error('自定义数据库路径不合法，回退到默认路径')
       databaseErrorMessage()
     }
   }
-
-  return dbPath
+  let dataPath = dbPath || createDataFolder()
+  return dataPath
 }
 
 export const dbPath = getDatabasePath() // 获取数据库路径

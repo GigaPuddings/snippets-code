@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { Registry } from "./utils/registry";
 
 // 将正则表达式移到外部，避免重复创建
-const guidRegex = /^\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}$/i;
+// const guidRegex = /^\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}$/i;
 
 export async function getInstalledApps() {
   const keys = [

@@ -18,9 +18,6 @@ function Home(): JSX.Element {
     // 注册快捷键
     window.api.shortCut([{ hotkey: shortCut.search, type: 'search' }, { hotkey: shortCut.config, type: 'config' }])
 
-    // 初始化存储数据
-    window.api.initTable()
-
     // 更新存储信息
     window.api.on('update-databaseDirectory', (configPath) => {
       setConfig({ ...config, databaseDirectory: configPath as string });

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import './ipc'
 import './db'
@@ -11,6 +11,15 @@ import { getInstalledApps } from './getApps'
 import config from './config'
 // import { autoUpdateInit } from './autoUpdater'
 import { dbPath } from './db/connect'
+import logger from 'electron-log/main'
+import { join } from 'node:path'
+
+logger.transports.console.level = false // 控制台关闭输出（只输出到文件）
+logger.transports.file.level = 'silly'
+logger.transports.file.maxSize = 1002430 // 文件最大不超过 1M
+logger.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} {text}'
+logger.transports.file.resolvePathFn = () => join(app.getPath('logs'), 'auto-update.log') // 在程序的安装目录（生产），或代码根目录（开发）的 log 文件夹下打印日志。
+logger.initialize()
 
 //当 Electron 完成时将调用此方法
 //初始化并准备创建浏览器窗口。

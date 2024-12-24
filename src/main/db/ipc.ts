@@ -1,10 +1,10 @@
 import { dialog, ipcMain, IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 import * as query from './query'
-import { initTable } from './tables'
 import { backupDatabase, dbPath, restoreDatabase } from './connect'
 import { getWindowByEvent } from '../windows'
 import { getLocalData, setLocalData } from '../helper'
 
+// 处理sql请求
 ipcMain.handle(
   'sql',
   (_event: IpcMainInvokeEvent, sql: string, type: SqlActionType, params = {}) => {
@@ -33,11 +33,6 @@ ipcMain.handle('getDatabaseDirectory', async ()=> {
 ipcMain.on('setDatabaseDirectory', (_event: IpcMainEvent, path: string) => {
   // config.databaseDirectory = path
   setLocalData('databaseDirectory', path)
-})
-
-// 创建表
-ipcMain.on('initTable', () => {
-  initTable()
 })
 
 // 处理备份请求
@@ -69,6 +64,7 @@ ipcMain.handle('backupDatabase', async (event: IpcMainInvokeEvent, backupType: s
 // 处理恢复请求
 ipcMain.handle('restoreDatabase', async (event: IpcMainInvokeEvent) => {
   try {
+    // 取消置顶
     getWindowByEvent(event).isAlwaysOnTop() && getWindowByEvent(event).setAlwaysOnTop(false)
     // 使用 dialog.showOpenDialog 打开文件选择器，让用户选择备份文件
     const result = await dialog.showOpenDialog({
